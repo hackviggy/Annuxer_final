@@ -1,6 +1,7 @@
 package database;
 
 import pojo.SignUpUserDetails;
+import utils.CommonUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,10 +16,10 @@ public class SignUp_DB {
 
     private void init() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/server1", "root", "12345678");
-            con1 = DriverManager.getConnection("jdbc:mysql://localhost:3308/server3", "root", "12345678");
-            con2 = DriverManager.getConnection("jdbc:mysql://localhost:3307/server2", "root", "12345678");
+            Class.forName(CommonUtils.CLASS_NAME);
+            con = DriverManager.getConnection(CommonUtils.SERVER_1, CommonUtils.DB_USER_NAME, CommonUtils.DB_PASSWORD);
+            con1 = DriverManager.getConnection(CommonUtils.SERVER_3, CommonUtils.DB_USER_NAME, CommonUtils.DB_PASSWORD);
+            con2 = DriverManager.getConnection(CommonUtils.SERVER_2, CommonUtils.DB_USER_NAME, CommonUtils.DB_PASSWORD);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,5 +90,9 @@ public class SignUp_DB {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void passwordUpdate(SignUpUserDetails userDetails) {
+
     }
 }
