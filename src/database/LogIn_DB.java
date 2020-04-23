@@ -28,6 +28,7 @@ public class LogIn_DB {
 
 
     public boolean initialPasswordLogin(LogInUserDetails logInUser) {
+        //we use ip for RSA
         init();
         InitialPasswordEncy initPassCrypt = new InitialPasswordEncy();
         String userName = logInUser.getUserName();
@@ -53,6 +54,7 @@ public class LogIn_DB {
     }
 
     public boolean phasePasswordLogin(LogInUserDetails logIn) {
+        //we use pp for AES
         PhasePasswordEncy phasePassCrypto = new PhasePasswordEncy();
         String ency_phase_password = logIn.getPhasePassword();
         String decy_phase_password = phasePassCrypto.decrypt(ency_phase_password);

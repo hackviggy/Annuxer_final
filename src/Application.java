@@ -110,7 +110,7 @@ public class Application {
                 signUp_db.updateOTP(OTP, userDetails.getUserName());
             }
         } else {
-            System.err.println("You typed wrong OTP please makesure type correct otp..!");
+            System.err.println("You typed wrong OTP please make sure type correct otp..!");
         }
     }
     private static void signUp() {
@@ -120,14 +120,17 @@ public class Application {
         SignUpUserDetails userDetails = getUserDetails();
         String username = userDetails.getUserName();
         if (checkFieldFromUserDetails(userDetails)) {
-            signUp_db.insertUserDetails(userDetails);
-            OTP = sendMail.sendMailToUser(userDetails.getUserEmail());
-            if (sendMail.verifyOTP()) {
-                signUp_db.updateOTP(OTP, username);
-                System.out.println("Account Create successfully..!");
-                home();
+            if (signUp_db.insertUserDetails(userDetails)) {
+                OTP = sendMail.sendMailToUser(userDetails.getUserEmail());
+                if (sendMail.verifyOTP()) {
+                    signUp_db.updateOTP(OTP, username);
+                    System.out.println("Account Create successfully..!");
+                    home();
+                } else {
+                    System.err.println("You typed wrong  please make sure type correct otp..!");
+                }
             } else {
-                System.err.println("You typed wrong  please makesure type correct otp..!");
+                System.err.println("User already exits..!");
             }
         }
     }
@@ -142,7 +145,7 @@ public class Application {
             System.err.println("NOT FULFILL PASSWORD POLICY");
             return false;
         }
-        if (!validation.checkUserPassword(userDetails.getPhasePassword())) {
+        if (!validation.checkUserp_Password(userDetails.getPhasePassword())) {
             System.err.println("NOT FULFILL PHASE PASSWORD POLICY");
             return false;
         }
@@ -160,19 +163,33 @@ public class Application {
     private static SignUpUserDetails getUserDetails() {
         SignUpUserDetails signup = new SignUpUserDetails();
         Scanner scan = new Scanner(System.in);
-        System.out.println("Enter user name = ");
+        System.out.print("Enter user name = ");
         signup.setUserName(scan.next());
+        System.out.println("Email ID Notification");
+        System.out.println("----------------------------");
         System.out.println(CommonUtils.EMAIL_PASSAGE);
-        System.out.println("Enter Email ID = ");
+        System.out.println("----------------------------");
+        System.out.print("Enter Email ID = ");
         signup.setUserEmail(scan.next());
-        System.out.println(CommonUtils.PASSWORD_PASSAGE);
-        System.out.println("Enter Password = ");
+        System.out.println("Password Policy ");
+        System.out.println("----------------------------");
+        System.out.println("*" + " it's less that 8 characters long. \n" + "*" + " " +
+                "it doesn't contain an digits or upper case characters \n" + "*" + " characters ~ in not allowed \n"
+                + "*" + " there should be a digit  \n" + "*" + " there should be a lower case character");
+        System.out.println("----------------------------");
+        System.out.print("Enter Password = ");
         signup.setUserPassword(scan.next());
-        System.out.println("Enter Confirm Password = ");
+        System.out.print("Enter Confirm Password = ");
         signup.setConfirmPassword(scan.next());
-        System.out.println("Enter Phase Password = ");
+        System.out.println("PhrasePassword Policy ");
+        System.out.println("----------------------------");
+        System.out.println("*" + " it's less that 15 characters long. \n" + "*" + " " +
+                "it doesn't contain an digits or upper case characters \n" + "*" + " characters ~ in not allowed \n"
+                + "*" + " there should be a digit  \n" + "*" + " there should be a lower case character");
+        System.out.println("----------------------------");
+        System.out.print("Enter Phrase Password = ");
         signup.setPhasePassword(scan.next());
-        System.out.println("Enter Confirm Phase Password = ");
+        System.out.print("Enter Confirm Phrase Password = ");
         signup.setConfirmPhasePassword(scan.next());
         try {
             signup.setUserIP(InetAddress.getLocalHost().getHostAddress());

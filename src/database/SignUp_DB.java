@@ -25,7 +25,7 @@ public class SignUp_DB {
         }
     }
 
-    public void insertUserDetails(SignUpUserDetails userDetails) {
+    public boolean insertUserDetails(SignUpUserDetails userDetails) {
         String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         //replace original query into the this statement
 
@@ -45,6 +45,7 @@ public class SignUp_DB {
             stmt.execute();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
         try {
 
@@ -59,6 +60,7 @@ public class SignUp_DB {
             stmt.execute();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
 
         try {
@@ -74,9 +76,10 @@ public class SignUp_DB {
             stmt.execute();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
 
-
+        return true;
     }
 
     public void updateOTP(int OTP, String name) {
