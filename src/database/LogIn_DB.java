@@ -27,10 +27,10 @@ public class LogIn_DB {
     }
 
 
-    public boolean initialPasswordLogin(LogInUserDetails logInUser) {
+    public boolean initialPasswordLogin(LogInUserDetails logInUser,InitialPasswordEncy initPassCrypt) {
         //we use ip for RSA
         init();
-        InitialPasswordEncy initPassCrypt = new InitialPasswordEncy();
+
         String userName = logInUser.getUserName();
         String ency_password = logInUser.getPassword();
         String decy_password = initPassCrypt.decrypt(ency_password);

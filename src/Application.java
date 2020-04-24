@@ -49,12 +49,12 @@ public class Application {
             logIn.setUserName(scan.next());
             System.out.println("Enter password =");
             login_password = scan.next();
+            //logIn.(initPassCrytp.encrypt(login_password));
             logIn.setPassword(initPassCrytp.encrypt(login_password));
             try {
                 logIn.setPass_ip(InetAddress.getLocalHost().getHostAddress());
-
                 //login process here
-                if (logIn_db.initialPasswordLogin(logIn)) {
+                if (logIn_db.initialPasswordLogin(logIn,initPassCrytp)) {
                     System.out.println("Enter phase password =");
                     phase_password = scan.next();
                     logIn.setPhasePassword(phasePasscryto.encrypt(phase_password));
