@@ -21,7 +21,7 @@ public class Application {
 
     private static void home() {
         while (true) {
-            System.out.println("1.Signup \n2.Login");
+            System.out.println("1.Signup \n2.Login\n");
             switch (new Scanner(System.in).nextInt()) {
                 case 1:
                     signUp();
@@ -36,10 +36,12 @@ public class Application {
     }
 
     private static void logIn() {
-        int loginAttempts = 0;
-        while (loginAttempts++ != 3) {
-            LogInUserDetails logIn = new LogInUserDetails();
-            LogIn_DB logIn_db = new LogIn_DB();
+        LogInUserDetails logIn = new LogInUserDetails();
+        LogIn_DB logIn_db = new LogIn_DB();
+        int loginAttempts = 1;
+        boolean loopstatus = true;
+        while (loginAttempts != 4) {
+            loginAttempts++;
             PhasePasswordEncy phasePasscryto = new PhasePasswordEncy();
             InitialPasswordEncy initPassCrytp = new InitialPasswordEncy();
             String login_password;
@@ -47,32 +49,48 @@ public class Application {
             Scanner scan = new Scanner(System.in);
             System.out.println("Enter user name =");
             logIn.setUserName(scan.next());
-            System.out.println("Enter password =");
-            login_password = scan.next();
-            //logIn.(initPassCrytp.encrypt(login_password));
-            logIn.setPassword(initPassCrytp.encrypt(login_password));
+
             try {
                 logIn.setPass_ip(InetAddress.getLocalHost().getHostAddress());
                 //login process here
-                if (logIn_db.initialPasswordLogin(logIn,initPassCrytp)) {
-                    System.out.println("Enter phase password =");
-                    phase_password = scan.next();
-                    logIn.setPhasePassword(phasePasscryto.encrypt(phase_password));
-                    logIn.setPhase_ip(InetAddress.getLocalHost().getHostAddress());
-                    if (logIn_db.phasePasswordLogin(logIn)) {
-                        System.out.println("Log in successfully..!");
-                        break;
+                if (logIn_db.logInDbUserNameCheck(logIn)) {
+                    if (logIn_db.ResetFlagCheck(logIn)) {
+                        System.out.println("Enter password =");
+                        login_password = scan.next();
+                        //logIn.(initPassCrytp.encrypt(login_password));
+                        logIn.setPassword(initPassCrytp.encrypt(login_password));
+                        if (logIn_db.initialPasswordLogin(logIn, initPassCrytp)) {
+                            System.out.println("Enter phase password =");
+                            phase_password = scan.next();
+                            logIn.setPhasePassword(phasePasscryto.encrypt(phase_password));
+                            logIn.setPhase_ip(InetAddress.getLocalHost().getHostAddress());
+                            if (logIn_db.phasePasswordLogin(logIn)) {
+                                System.out.println("Log in successfully..!");
+                                loopstatus = false;
+                                break;
+                            } else {
+                                System.out.println("Phase password wrong..!");
+                            }
+                        } else {
+                            System.out.println("username or password wrong...!");
+                        }
                     } else {
-                        System.out.println("Phase password wrong..!");
+                        System.out.println("reset your password first..!");
+                        loopstatus = true;
+                        break;
+
                     }
                 } else {
-                    System.out.println("username or password wrong...!");
+                    System.out.println("user name wrong..!");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                break;
             }
         }
-        forgetPassword();
+        if (loopstatus) {
+            forgetPassword(logIn.getUserName(), logIn_db);
+        }
 
 
     }
@@ -88,12 +106,12 @@ public class Application {
         signup.setPhasePassword(scan.next());
         System.out.println("Enter Confirm Phase Password = ");
         signup.setConfirmPhasePassword(scan.next());
-        signup.setUserEmail("xxx@dummy.com");
 
         return signup;
     }
 
-    private static void forgetPassword() {
+    private static void forgetPassword(String U_name, LogIn_DB logInDb) {
+        logInDb.updateReset(true, U_name);
         System.out.println("You are use exitising amount of attempts please reset your password..!");
         SignUpUserDetails forgetPasswordUserDetails = new SignUpUserDetails();
         SignUp_DB signUp_db = new SignUp_DB();
@@ -105,9 +123,14 @@ public class Application {
         if (sendMail.verifyOTP()) {
             SignUpUserDetails userDetails = setNewPassword();
             userDetails.setUserName(forgetPasswordUserDetails.getUserName());
+            userDetails.setUserEmail(forgetPasswordUserDetails.getUserEmail());
             if (checkFieldFromUserDetails(userDetails)) {
-                signUp_db.passwordUpdate(userDetails);
-                signUp_db.updateOTP(OTP, userDetails.getUserName());
+                if (signUp_db.passwordUpdate(userDetails)) {
+                    logInDb.updateReset(false, U_name);
+                    signUp_db.updateOTP(OTP, userDetails.getUserName());
+                } else {
+                    System.err.println("password is not updated");
+                }
             }
         } else {
             System.err.println("You typed wrong OTP please make sure type correct otp..!");

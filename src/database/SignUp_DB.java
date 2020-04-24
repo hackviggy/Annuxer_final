@@ -95,7 +95,22 @@ public class SignUp_DB {
         }
     }
 
-    public void passwordUpdate(SignUpUserDetails userDetails) {
-
+    public boolean passwordUpdate(SignUpUserDetails userDetails) {
+        try {
+            init();
+            PreparedStatement stmt = con.prepareStatement("UPDATE `User_detail_S1` SET `User_detail_S1_FPassword` = ? WHERE `User_detail_S1_Mail_ID` = ? ;");
+            PreparedStatement stmt1 = con2.prepareStatement("UPDATE `User_detail_S2` SET `User_detail_S2_sPassword` = ? WHERE `User_detail_S2_Mail_ID` = ? ;");
+            //set details according to table fields type
+            stmt.setString(2, userDetails.getUserEmail());
+            stmt.setString(1, userDetails.getUserPassword());
+            stmt1.setString(2, userDetails.getUserEmail());
+            stmt1.setString(1, userDetails.getPhasePassword());
+            stmt.execute();
+            stmt1.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
