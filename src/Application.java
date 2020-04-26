@@ -6,8 +6,11 @@ import database.SignUp_DB;
 import pojo.LogInUserDetails;
 import pojo.SignUpUserDetails;
 import utils.CommonUtils;
+import utils.FileMerge;
+import utils.FileSplit;
 import utils.SendMail;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
@@ -28,11 +31,57 @@ public class Application {
                     break;
                 case 2:
                     logIn();
+                    fileOperation();
                     break;
                 default:
                     System.out.println("select accorndingly");
             }
         }
+    }
+
+    private static void fileOperation() {
+
+        while (true) {
+            System.out.println("1.Upload \n2.Download\n");
+            switch (new Scanner(System.in).nextInt()) {
+                case 1:
+                    uploadFile();
+                    break;
+                case 2:
+                    downloadFile();
+                    break;
+                default:
+                    System.out.println("select accorndingly");
+            }
+        }
+    }
+
+    private static void downloadFile() {
+        FileSplit file = new FileSplit();
+        FileMerge fileMerge = new FileMerge();
+        System.out.println("Enter correct file path ");
+        String fileName = new Scanner(System.in).next();
+        if (file.fileExitis(fileName)) {
+            File originalFile = fileMerge.fileMerge(fileName);
+        } else {
+            System.err.println("file does not exits");
+        }
+    }
+
+    private static void uploadFile() {
+        FileSplit file = new FileSplit();
+        System.out.println("Enter correct file path ");
+        String fileName = new Scanner(System.in).next();
+        if (file.fileExitis(fileName)) {
+            if (file.fileUpload(fileName)) {
+                System.out.println("File upload successfully..!");
+            } else {
+                System.err.println("File upload failure..!");
+            }
+        } else {
+            System.err.println("file does not exits");
+        }
+
     }
 
     private static void logIn() {
