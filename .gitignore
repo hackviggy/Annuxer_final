@@ -53,4 +53,4 @@ out/production/Annuxer/
 hs_err_pid*
 
 .idea
-*.xml
+Annuxer.iml

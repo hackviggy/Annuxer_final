@@ -18,9 +18,11 @@ import java.util.Scanner;
 public class Application {
 
     public static void main(String[] args) {
-        //commite for testing suepr da 
+
+
         home();
     }
+
 
     private static void home() {
         while (true) {
@@ -71,7 +73,8 @@ public class Application {
     private static void uploadFile() {
         FileSplit file = new FileSplit();
         System.out.println("Enter correct file path ");
-        String fileName = new Scanner(System.in).next();
+        String fileName = null;
+        //String fileName =showFileList();
         if (file.fileExitis(fileName)) {
             if (file.fileUpload(fileName)) {
                 System.out.println("File upload successfully..!");
@@ -185,6 +188,7 @@ public class Application {
             System.err.println("You typed wrong OTP please make sure type correct otp..!");
         }
     }
+
     private static void signUp() {
         SignUp_DB signUp_db = new SignUp_DB();
         SendMail sendMail = new SendMail();

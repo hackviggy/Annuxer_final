@@ -11,5 +11,6 @@ public class CommonUtils {
     public static String SERVER_1 = "jdbc:mysql://localhost:3306/server1";
     public static String SERVER_2 = "jdbc:mysql://localhost:3307/server2";
     public static String SERVER_3 = "jdbc:mysql://localhost:3308/server3";
+    public static String salt = "123456789!@#$%^&*(!!!!";
 
 }
