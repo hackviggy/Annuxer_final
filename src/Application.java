@@ -5,10 +5,7 @@ import database.LogIn_DB;
 import database.SignUp_DB;
 import pojo.LogInUserDetails;
 import pojo.SignUpUserDetails;
-import utils.CommonUtils;
-import utils.FileMerge;
-import utils.FileSplit;
-import utils.SendMail;
+import utils.*;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -20,7 +17,11 @@ public class Application {
     public static void main(String[] args) {
 
 
-        home();
+
+
+        new Output().outPutMethod();
+
+//        home();
     }
 
 
@@ -62,9 +63,11 @@ public class Application {
         FileSplit file = new FileSplit();
         FileMerge fileMerge = new FileMerge();
         System.out.println("Enter correct file path ");
+        //String fileName =showFileList();
         String fileName = new Scanner(System.in).next();
         if (file.fileExitis(fileName)) {
             File originalFile = fileMerge.fileMerge(fileName);
+            System.out.println("download finish");
         } else {
             System.err.println("file does not exits");
         }
@@ -74,7 +77,7 @@ public class Application {
         FileSplit file = new FileSplit();
         System.out.println("Enter correct file path ");
         String fileName = null;
-        //String fileName =showFileList();
+
         if (file.fileExitis(fileName)) {
             if (file.fileUpload(fileName)) {
                 System.out.println("File upload successfully..!");

@@ -29,6 +29,7 @@ public class FileSplit {
             switch (copy) {
                 case 1:
                     byte[] md5 = MessageDigest.getInstance("MD5").digest(fileChar.toString().getBytes());
+                    //chec file duplicate
                     Files.write(newFilePath, cryptoFile.encrypt(fileChar.toString(), new String(md5)).getBytes());
                     break;
                 case 2:
@@ -55,11 +56,11 @@ public class FileSplit {
         ext = Paths.get(fileName).getFileName().toString().split("[.]")[1];
         try {
             File file = new File(fileName);
-            byte[] fileEncyContent = Files.readAllBytes(file.toPath());
+            byte[] fileContent = Files.readAllBytes(file.toPath());
             //put hashkey here to get original content of file
 
 
-            byte[] fileContent = cryptoFile.decrypt(new String(fileEncyContent), "").getBytes();
+            //byte[] fileContent = cryptoFile.encrypt(new String(fileEncyContent), "").getBytes();
 
 
 
@@ -67,9 +68,7 @@ public class FileSplit {
             int start = 0;
             int end = fileContent.length / 4;
             int sizeM = end;
-            for (
-                    int i = 1;
-                    i <= 4; i++) {
+            for (int i = 1;i <= 4; i++) {
                 writeFile(start, end, fileContent, i);
                 start = end;
                 end += sizeM;

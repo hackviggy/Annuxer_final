@@ -1,5 +1,7 @@
 package utils;
 
+import crytography.FileEncyDecy;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,6 +11,7 @@ import java.util.List;
 
 public class FileMerge {
     private String fileName, ext;
+    private static FileEncyDecy cryptoFile = new FileEncyDecy();
 
     public File fileMerge(String fName) {
         fileName = Paths.get(fName).getFileName().toString().split("[.]")[0];
@@ -31,7 +34,8 @@ public class FileMerge {
                 bytesRead = fis.read(fileBytes, 0, (int) file.length());
                 assert (bytesRead == fileBytes.length);
                 assert (bytesRead == (int) file.length());
-                fos.write(fileBytes);
+                fos.write(cryptoFile.encrypt(new String(fileBytes), "").getBytes());
+                //
                 fos.flush();
                 fileBytes = null;
                 fis.close();
